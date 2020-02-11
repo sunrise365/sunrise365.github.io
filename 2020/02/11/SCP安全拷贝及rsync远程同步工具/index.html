@@ -6,23 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sunrise365.github.io">
-  <title>linux虚拟机安装nginx实现客户端访问的负载均衡配置 | fyq</title>
+  <title>SCP安全拷贝的三种方式以及rsync远程同步工具 | fyq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="问题概述在做微服务配置的时候，通过nginx来进行项目的负载均衡，而我将nginx放在了虚拟机的Linux系统上，也就是客户端在发送请求的时候会找到虚拟机的地址，nginx监听80端口，在监听到请求以后再讲请求发送到主机上的对应端口，至于为什么要使用nginx进行负载均衡以及负载均衡的实现的原来和方法可自行百度。下面我会贴上图片记录搭建的过程。">
+  <meta name="description" content="问题描述scp 可以实现服务器与服务器之间的数据拷贝。 （from server1 to server2）   也就是说，当其中一台服务器数据丢失的情况下，可以从别的服务器上安全拷贝数据到丢失的服务器上面   以下会介绍scp的三种基本用法，以及permission denied报错的原因分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux虚拟机安装nginx实现客户端访问的负载均衡配置">
-<meta property="og:url" content="http://sunrise365.github.io/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:title" content="SCP安全拷贝的三种方式以及rsync远程同步工具">
+<meta property="og:url" content="http://sunrise365.github.io/2020/02/11/%C2%96SCP%E5%AE%89%E5%85%A8%E6%8B%B7%E8%B4%9D%E5%8F%8Arsync%E8%BF%9C%E7%A8%8B%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7/index.html">
 <meta property="og:site_name" content="fyq">
-<meta property="og:description" content="问题概述在做微服务配置的时候，通过nginx来进行项目的负载均衡，而我将nginx放在了虚拟机的Linux系统上，也就是客户端在发送请求的时候会找到虚拟机的地址，nginx监听80端口，在监听到请求以后再讲请求发送到主机上的对应端口，至于为什么要使用nginx进行负载均衡以及负载均衡的实现的原来和方法可自行百度。下面我会贴上图片记录搭建的过程。">
-<meta property="og:image" content="http://sunrise365.github.io/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/1.png">
-<meta property="og:image" content="http://sunrise365.github.io/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/2.png">
-<meta property="og:image" content="http://sunrise365.github.io/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/4.png">
-<meta property="article:published_time" content="2020-01-25T07:12:06.000Z">
-<meta property="article:modified_time" content="2020-01-25T07:20:54.758Z">
+<meta property="og:description" content="问题描述scp 可以实现服务器与服务器之间的数据拷贝。 （from server1 to server2）   也就是说，当其中一台服务器数据丢失的情况下，可以从别的服务器上安全拷贝数据到丢失的服务器上面   以下会介绍scp的三种基本用法，以及permission denied报错的原因分析">
+<meta property="article:published_time" content="2020-02-11T08:23:49.000Z">
+<meta property="article:modified_time" content="2020-02-11T11:58:01.482Z">
 <meta property="article:author" content="Fyq">
-<meta property="article:tag" content="nginx">
+<meta property="article:tag" content="SCP">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://sunrise365.github.io/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/1.png">
   
     <link rel="alternative" href="/atom.xml" title="fyq" type="application/atom+xml">
   
@@ -168,20 +164,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-linux虚拟机安装nginx实现客户端访问的负载均衡配置" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-SCP安全拷贝及rsync远程同步工具" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      linux虚拟机安装nginx实现客户端访问的负载均衡配置
+      SCP安全拷贝的三种方式以及rsync远程同步工具
     </h1>
   
 
         
-        <a href="/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/" class="archive-article-date">
-  	<time datetime="2020-01-25T07:12:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-25</time>
+        <a href="/2020/02/11/%C2%96SCP%E5%AE%89%E5%85%A8%E6%8B%B7%E8%B4%9D%E5%8F%8Arsync%E8%BF%9C%E7%A8%8B%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7/" class="archive-article-date">
+  	<time datetime="2020-02-11T08:23:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-11</time>
 </a>
         
       </header>
@@ -190,29 +186,149 @@
 		
 
 			
-				<h2 id="问题概述"><a href="#问题概述" class="headerlink" title="问题概述"></a>问题概述</h2><p>在做微服务配置的时候，通过nginx来进行项目的负载均衡，而我将nginx放在了虚拟机的Linux系统上，也就是客户端在发送请求的时候会找到虚拟机的地址，nginx监听80端口，在监听到请求以后再讲请求发送到主机上的对应端口，至于为什么要使用nginx进行负载均衡以及负载均衡的实现的原来和方法可自行百度。下面我会贴上图片记录搭建的过程。</p>
+				<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>scp 可以实现服务器与服务器之间的数据拷贝。 （from server1 to server2）  </p>
+<p>也就是说，当其中一台服务器数据丢失的情况下，可以从别的服务器上安全拷贝数据到丢失的服务器上面  </p>
+<p>以下会介绍scp的三种基本用法，以及permission denied报错的原因分析  </p>
 <a id="more"></a>
 
-<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h3><ul>
-<li>当时我主机的IP地址：192.168.3.217</li>
-<li>虚拟机的ip地址是：192.168.3.168</li>
-<li>虚拟机采用的centos8，网络为桥接模式</li>
+<h3 id="一、-SCP的基本语法"><a href="#一、-SCP的基本语法" class="headerlink" title="一、 SCP的基本语法"></a>一、 SCP的基本语法</h3><table>
+<thead>
+<tr>
+<th align="center">scp</th>
+<th align="center">-r</th>
+<th align="center">$pdir/$fname</th>
+<th align="right">$user@hadoop$host:$pdir/$fname</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">命令</td>
+<td align="center">递归</td>
+<td align="center">要拷贝的文件路径/名称</td>
+<td align="right">目的用户@主机:目的路径/名称</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>注意：</p>
+<ul>
+<li><p>如果目标目录不存在，直接将源 test 放到 opt 目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp	 -r	 test&#x2F; 	   root@hadoop102:&#x2F;opt&#x2F;目标目录&#x2F;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果目标目录存在，将源 test 放到 opt/test 目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp      -r     test&#x2F;        root@hadoop102:&#x2F;opt&#x2F;目标目录&#x2F;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将源内容直接拷贝到目标目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp      -r      test&#x2F;*      root@hadoop102:&#x2F;opt&#x2F;目标目录&#x2F;</span><br></pre></td></tr></table></figure>
+
+</li>
 </ul>
-<h4 id="1-在Windows上的hosts中配置虚拟机的ip地址-与域名的对应关系"><a href="#1-在Windows上的hosts中配置虚拟机的ip地址-与域名的对应关系" class="headerlink" title="1. 在Windows上的hosts中配置虚拟机的ip地址 与域名的对应关系"></a>1. 在Windows上的hosts中配置虚拟机的ip地址 与域名的对应关系</h4><img src="/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/1.png" class="">
+</li>
+</ul>
+<h3 id="案例实践-一共三种方式"><a href="#案例实践-一共三种方式" class="headerlink" title="案例实践(一共三种方式)"></a>案例实践(一共三种方式)</h3><h4 id="1-在-hadoop101-上，-将-hadoop101-中-opt-module-目录下的软件拷贝到-hadoop102上"><a href="#1-在-hadoop101-上，-将-hadoop101-中-opt-module-目录下的软件拷贝到-hadoop102上" class="headerlink" title="1. 在 hadoop101 上， 将 hadoop101 中/opt/module 目录下的软件拷贝到 hadoop102上"></a>1. 在 hadoop101 上， 将 hadoop101 中/opt/module 目录下的软件拷贝到 hadoop102上</h4><ul>
+<li><p>正确写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop101 &#x2F;]$ scp -r &#x2F;opt&#x2F;module root@hadoop102:&#x2F;opt&#x2F;module</span><br></pre></td></tr></table></figure>
 
-<ol>
-<li>这一步可以直接在host的文件中修改，也可以使用辅助工具SwitchHosts，效果是一样的</li>
-<li>host中填写的地址是虚拟机中Linux的ip地址，这样才能根据地址请求找到虚拟机</li>
-</ol>
-<h4 id="2-在虚拟机中的-etc-hosts-文件中也配置主机的ip-以及与域名的对应关系"><a href="#2-在虚拟机中的-etc-hosts-文件中也配置主机的ip-以及与域名的对应关系" class="headerlink" title="2. 在虚拟机中的 /etc/hosts 文件中也配置主机的ip 以及与域名的对应关系"></a>2. 在虚拟机中的 /etc/hosts 文件中也配置主机的ip 以及与域名的对应关系</h4><img src="/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/2.png" class="">
+<ul>
+<li><p>拷贝以后不要忘了修改文件的所有者：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop102 opt]$ sudo chown -R fyq:fyq module&#x2F;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>错误写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop101 &#x2F;]$ scp -r &#x2F;opt&#x2F;module fyq@hadoop102:&#x2F;opt&#x2F;module</span><br></pre></td></tr></table></figure>
 
-<p>这一步非常关键，以为我查阅了很多资料是没有配置这一步的，但是我在做的时候，没有配置虚拟机与主机的对应关系而访问不到！如果你也是可以试试在虚拟机上的host文件中加上主机的ip地址</p>
-<h4 id="3-在nginx-config中添加的配置，地址就在你安装nginx文件的conf文件夹中"><a href="#3-在nginx-config中添加的配置，地址就在你安装nginx文件的conf文件夹中" class="headerlink" title="3. 在nginx.config中添加的配置，地址就在你安装nginx文件的conf文件夹中"></a>3. 在nginx.config中添加的配置，地址就在你安装nginx文件的conf文件夹中</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       <span class="number">80</span>;</span><br><span class="line">        server_name  manage.leyou.com;</span><br><span class="line"></span><br><span class="line">        proxy_set_header X-Forwarded-Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-Server $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">			proxy_pass http:<span class="comment">//192.168.3.217:9001;</span></span><br><span class="line">			proxy_connect_timeout <span class="number">600</span>;</span><br><span class="line">			proxy_read_timeout <span class="number">600</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	server &#123;</span><br><span class="line">        listen       <span class="number">80</span>;</span><br><span class="line">        server_name  api.leyou.com;</span><br><span class="line"></span><br><span class="line">        proxy_set_header X-Forwarded-Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-Server $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">			proxy_pass http:<span class="comment">//192.168.3.217:10010;</span></span><br><span class="line">			proxy_connect_timeout <span class="number">600</span>;</span><br><span class="line">			proxy_read_timeout <span class="number">600</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>会出现permission denied的错误，原因是因为权限不够的问题。</p>
+</li>
+<li><p>分析：我们是将101机器上的module拷贝到102的机器上，102机器上的module在opt下面，而opt的所有者是root，而这里是fyq用户向root下面放文件会出现权限不够的问题。（就像是直接在102机器上以fyq用户的身份mkdir module）</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-在-hadoop103-上，-将-hadoop101-服务器上的-opt-module-目录下的软件拷贝到hadoop103-上"><a href="#2-在-hadoop103-上，-将-hadoop101-服务器上的-opt-module-目录下的软件拷贝到hadoop103-上" class="headerlink" title="2. 在 hadoop103 上， 将 hadoop101 服务器上的/opt/module 目录下的软件拷贝到hadoop103 上"></a>2. 在 hadoop103 上， 将 hadoop101 服务器上的/opt/module 目录下的软件拷贝到hadoop103 上</h4><ul>
+<li><p>全部写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop103 opt]$sudo scp -r fyq@hadoop101:&#x2F;opt&#x2F;module root@hadoop103:&#x2F;opt&#x2F;module</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>简略写法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop103 opt]$sudo scp -r fyq@hadoop101:&#x2F;opt&#x2F;module .&#x2F;module</span><br></pre></td></tr></table></figure>
 
-<p>​    这里需要修改proxy_pass http，将后面的IP地址以及端口号修改为自己主机的IP地址以及项目启动的端口号即可。</p>
-<h4 id="4-前端的端口号以及ip-：-如果是虚拟机要配置成0-0-0-0，这样才能被别的ip访问，如果是localhost或者127-0-0-1的话是只能通过本机访问的"><a href="#4-前端的端口号以及ip-：-如果是虚拟机要配置成0-0-0-0，这样才能被别的ip访问，如果是localhost或者127-0-0-1的话是只能通过本机访问的" class="headerlink" title="4. 前端的端口号以及ip ： 如果是虚拟机要配置成0.0.0.0，这样才能被别的ip访问，如果是localhost或者127.0.0.1的话是只能通过本机访问的"></a>4. 前端的端口号以及ip ： 如果是虚拟机要配置成0.0.0.0，这样才能被别的ip访问，如果是localhost或者127.0.0.1的话是只能通过本机访问的</h4><img src="/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/4.png" class="">
+<p>这里拷贝完了同样也不要忘记修改文件夹的权限（如果需要的话）</p>
+</li>
+<li><p>错误写法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop103 opt]$ scp -r fyq@hadoop101:&#x2F;opt&#x2F;module .&#x2F;module</span><br></pre></td></tr></table></figure>
 
-<h4 id="5-记得关闭Windows和Linux的防火墙！"><a href="#5-记得关闭Windows和Linux的防火墙！" class="headerlink" title="5. 记得关闭Windows和Linux的防火墙！"></a>5. 记得关闭Windows和Linux的防火墙！</h4>
+<p>错误分析：这里面也会报一个permission denied的错误，但是这个错误是因为103机器上创建一个module的文件夹但是没有权限造成，所以只要加上sudo就可以了（前提是你的fyq用户是已经被授权了的）</p>
+</li>
+</ul>
+<h4 id="3-在-hadoop103-上操作将-hadoop101-中-opt-module-目录下的软件拷贝hadoop104-上"><a href="#3-在-hadoop103-上操作将-hadoop101-中-opt-module-目录下的软件拷贝hadoop104-上" class="headerlink" title="3. 在 hadoop103 上操作将 hadoop101 中/opt/module 目录下的软件拷贝hadoop104 上"></a>3. 在 hadoop103 上操作将 hadoop101 中/opt/module 目录下的软件拷贝hadoop104 上</h4><ul>
+<li>正确写法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop103 opt]$ scp -r fyq@hadoop101:&#x2F;opt&#x2F;module root@hadoop104:&#x2F;opt&#x2F;module</span><br></pre></td></tr></table></figure>
+
+<h5 id="小知识点"><a href="#小知识点" class="headerlink" title="小知识点"></a>小知识点</h5><ul>
+<li>如果module文件夹是创建的，则需要修改文件夹的权限（如果你需要的话），但是如果确实的文件是在module下面的一部分，不需要重新创建文件夹的话是不需要修改文件夹的权限的，因为权限已经是修改过的了，不放心的话可以查看一下</li>
+<li>拷贝过来的配置文件别忘了 source 一下/etc/profile</li>
+</ul>
+<h2 id="二、-rsync的概述"><a href="#二、-rsync的概述" class="headerlink" title="二、 rsync的概述"></a>二、 rsync的概述</h2><p>rsync 主要用于备份和镜像。具有速度快、避免复制相同内容和支持符号链接的优点。</p>
+<p>rsync 和 scp 区别： 用 rsync 做文件的复制要比 scp 的速度快， rsync 只对差异文件做更新。 scp 是把所有文件都复制过去。</p>
+<h3 id="rsync基本语法"><a href="#rsync基本语法" class="headerlink" title="rsync基本语法"></a>rsync基本语法</h3><table>
+<thead>
+<tr>
+<th align="center">scp</th>
+<th align="center">-r</th>
+<th align="center">$pdir/$fname</th>
+<th align="center">$user@hadoop$host:$pdir/$fname</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">命令</td>
+<td align="center">递归</td>
+<td align="center">要拷贝的文件路径/名称</td>
+<td align="center">目的用户@主机:目的路径/名称</td>
+</tr>
+</tbody></table>
+<ul>
+<li>选项参数： <ul>
+<li>​    -r    :    递归</li>
+<li>​    -v    :    显示复制过程</li>
+<li>​    -l    :  拷贝符号的连接</li>
+</ul>
+</li>
+</ul>
+<h3 id="案例实践"><a href="#案例实践" class="headerlink" title="案例实践"></a>案例实践</h3><h4 id="1、把-hadoop101-机器上的-opt-software-目录同步到-hadoop102-服务器的-root-用户下的-opt-目录"><a href="#1、把-hadoop101-机器上的-opt-software-目录同步到-hadoop102-服务器的-root-用户下的-opt-目录" class="headerlink" title="1、把 hadoop101 机器上的/opt/software 目录同步到 hadoop102 服务器的 root 用户下的/opt/目录"></a>1、把 hadoop101 机器上的/opt/software 目录同步到 hadoop102 服务器的 root 用户下的/opt/目录</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop101 opt]$ rsync -rvl &#x2F;opt&#x2F;software&#x2F; root@hadoop102:&#x2F;opt&#x2F;software</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、xsync-集群分发脚本"><a href="#2、xsync-集群分发脚本" class="headerlink" title="2、xsync 集群分发脚本"></a>2、xsync 集群分发脚本</h4><ul>
+<li><p>需求：循环复制文件到所有节点的相同目录下</p>
+</li>
+<li><p>需求分析：</p>
+<ul>
+<li><p>rsync 命令原始拷贝：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -rvl &#x2F;opt&#x2F;module root@hadoop103:&#x2F;opt&#x2F;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>期望脚本：</p>
+<p>xsync 要同步的文件名称</p>
+</li>
+<li><p>说明：</p>
+<p>在/home/atguigu/bin 这个目录下存放的脚本， atguigu 用户可以在系统任何地方直接执行</p>
+</li>
+</ul>
+</li>
+<li><p>脚本实现</p>
+<ul>
+<li><p>1、在/home/atguigu 目录下创建 bin 目录，并在 bin 目录下 xsync 创建文件，文件内容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop102 ~]$ mkdir bin</span><br><span class="line">[fyq@hadoop102 ~]$ cd bin&#x2F;</span><br><span class="line">[fyq@hadoop102 bin]$ touch xsync</span><br><span class="line">[fyq@hadoop102 bin]$ vi xsync</span><br></pre></td></tr></table></figure>
+
+<p>在该文件中编写如下代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">#1 获取输入参数个数，如果没有参数，直接退出</span><br><span class="line">pcount&#x3D;$#</span><br><span class="line">if((pcount&#x3D;&#x3D;0)); then</span><br><span class="line">echo no args;</span><br><span class="line">exit;</span><br><span class="line">fi</span><br><span class="line">#2 获取文件名称</span><br><span class="line">p1&#x3D;$1</span><br><span class="line">fname&#x3D;&#96;basename $p1&#96;</span><br><span class="line">echo fname&#x3D;$fname</span><br><span class="line">#3 获取上级目录到绝对路径 –P 指向实际物理地址，防止软连接</span><br><span class="line">pdir&#x3D;&#96;cd -P $(dirname $p1); pwd&#96;</span><br><span class="line">echo pdir&#x3D;$pdir</span><br><span class="line">#4 获取当前用户名称</span><br><span class="line">user&#x3D;&#96;whoami&#96;</span><br><span class="line">#5 循环</span><br><span class="line">for((host&#x3D;103; host&lt;105; host++)); do</span><br><span class="line">echo ------------------- hadoop$host --------------</span><br><span class="line">rsync -rvl $pdir&#x2F;$fname $user@hadoop$host:$pdir</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2、修改脚本 xsync 具有执行权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop102 bin]$ chmod 777 xsync</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>3、调用脚本形式： xsync 文件名称</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[fyq@hadoop102 bin]$ chmod 777 xsync</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+
 			
 		
     </div>
@@ -224,7 +340,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SCP</a>
         		</li>
       		
 		</ul>
@@ -236,7 +352,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/java//" class="article-tag-list-link color5">java</a>
+        			<a href="/categories/大数据//" class="article-tag-list-link color4">大数据</a>
         		</li>
       		
 		</ul>
@@ -291,7 +407,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://sunrise365.github.io/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://sunrise365.github.io/2020/02/11/%C2%96SCP%E5%AE%89%E5%85%A8%E6%8B%B7%E8%B4%9D%E5%8F%8Arsync%E8%BF%9C%E7%A8%8B%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -305,15 +421,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/02/03/proxy%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          proxy动态代理详解
-        
-      </div>
-    </a>
   
+    <a href="/2020/02/03/proxy%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">proxy动态代理详解</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
