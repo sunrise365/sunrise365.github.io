@@ -6,14 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sunrise365.github.io">
-  <title>Tag: proxy | fyq</title>
+  <title>使用IDEA工具编写java连接hadoop操作HDFS案例显示权限问题的解决办法 | fyq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="fyq">
-<meta property="og:url" content="http://sunrise365.github.io/tags/proxy/index.html">
+  <meta name="description" content="问题概述在进行Hadoop的学习过程中，在虚拟机上搭建了集群服务，使用IDEA工具编写java连接hadoop集群并操作HDFS。但是在写测试代码运行以后出现的权限问题的错误">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用IDEA工具编写java连接hadoop操作HDFS案例显示权限问题的解决办法">
+<meta property="og:url" content="http://sunrise365.github.io/2020/02/12/java%E8%BF%9E%E6%8E%A5hadoop%E6%93%8D%E4%BD%9CHDFS%E6%A1%88%E4%BE%8B%E6%98%BE%E7%A4%BA%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/index.html">
 <meta property="og:site_name" content="fyq">
+<meta property="og:description" content="问题概述在进行Hadoop的学习过程中，在虚拟机上搭建了集群服务，使用IDEA工具编写java连接hadoop集群并操作HDFS。但是在写测试代码运行以后出现的权限问题的错误">
+<meta property="og:image" content="http://sunrise365.github.io/2020/02/12/java%E8%BF%9E%E6%8E%A5hadoop%E6%93%8D%E4%BD%9CHDFS%E6%A1%88%E4%BE%8B%E6%98%BE%E7%A4%BA%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/1.png">
+<meta property="article:published_time" content="2020-02-12T08:31:59.000Z">
+<meta property="article:modified_time" content="2020-02-12T08:49:30.021Z">
 <meta property="article:author" content="Fyq">
+<meta property="article:tag" content="hadoop - HDFS">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://sunrise365.github.io/2020/02/12/java%E8%BF%9E%E6%8E%A5hadoop%E6%93%8D%E4%BD%9CHDFS%E6%A1%88%E4%BE%8B%E6%98%BE%E7%A4%BA%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/1.png">
   
     <link rel="alternative" href="/atom.xml" title="fyq" type="application/atom+xml">
   
@@ -159,48 +166,68 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-java连接hadoop操作HDFS案例显示权限问题的解决办法" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/02/03/proxy%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/" class="archive-article-date">
-  	<time datetime="2020-02-03T08:17:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-03</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/02/03/proxy%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/">proxy动态代理详解</a>
+    <h1 class="article-title" itemprop="name">
+      使用IDEA工具编写java连接hadoop操作HDFS案例显示权限问题的解决办法
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/02/12/java%E8%BF%9E%E6%8E%A5hadoop%E6%93%8D%E4%BD%9CHDFS%E6%A1%88%E4%BE%8B%E6%98%BE%E7%A4%BA%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" class="archive-article-date">
+  	<time datetime="2020-02-12T08:31:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+		
+
+			
+				<h2 id="问题概述"><a href="#问题概述" class="headerlink" title="问题概述"></a>问题概述</h2><p>在进行Hadoop的学习过程中，在虚拟机上搭建了集群服务，使用IDEA工具编写java连接hadoop集群并操作HDFS。但是在写测试代码运行以后出现的权限问题的错误</p>
+<a id="more"></a>
+
+<h3 id="java连接hadoop的测试代码"><a href="#java连接hadoop的测试代码" class="headerlink" title="java连接hadoop的测试代码"></a>java连接hadoop的测试代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.hdfs;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.fs.FileSystem;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.fs.Path;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.annotation.ThreadSafe;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HdfsClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 测试连接HDFS （创建一个目录）</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestMkdir</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 1. 用于配置HDFS的相关参数(这个configuration是org.apache.hadoop包里面的)</span></span><br><span class="line">        Configuration conf = <span class="keyword">new</span> Configuration();</span><br><span class="line">        <span class="comment">// 1.1 设置NameNode的地址（有两个参数，第一个是名字，第二个是值） , 最好就是从/opt/module/hadoop-2.7.2/etc/hadoop/core-site.xml中直接拷贝过来</span></span><br><span class="line">        conf.set(<span class="string">"fs.defaultFS"</span>,<span class="string">"hdfs://hadoop102:9000"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 创建一个用于操作HDFS集群的FileSystem对象（FileSystem也是org.apache.hadoop包里面的）</span></span><br><span class="line">        FileSystem fs = FileSystem.get(conf);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 创建目录</span></span><br><span class="line">        fs.mkdirs(<span class="keyword">new</span> Path(<span class="string">"/user/atguigu/input2"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4. 关闭资源</span></span><br><span class="line">        fs.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="pom文件代码"><a href="#pom文件代码" class="headerlink" title="pom文件代码"></a>pom文件代码</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;RELEASE&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;2.8.2&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;!-- hadoop的辅助工具类 --&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;hadoop-common&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;2.7.2&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;!-- hadoop的客户端 --&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;2.7.2&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;!-- hadoop的HDFS文件系统 --&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;hadoop-hdfs&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;2.7.2&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="报错信息（部分）"><a href="#报错信息（部分）" class="headerlink" title="报错信息（部分）"></a>报错信息（部分）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.security.AccessControlException: Permission denied: user=fyq, access=WRITE, inode=<span class="string">"/user/atguigu/input2"</span>:atguigu:supergroup:drwxr-xr-x</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.check(FSPermissionChecker.java:<span class="number">319</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.check(FSPermissionChecker.java:<span class="number">292</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:<span class="number">213</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:<span class="number">190</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:<span class="number">1720</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:<span class="number">1704</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkAncestorAccess(FSDirectory.java:<span class="number">1687</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSDirMkdirOp.mkdirs(FSDirMkdirOp.java:<span class="number">71</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.mkdirs(FSNamesystem.java:<span class="number">3894</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.mkdirs(NameNodeRpcServer.java:<span class="number">983</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.mkdirs(ClientNamenodeProtocolServerSideTranslatorPB.java:<span class="number">622</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$<span class="number">2</span>.callBlockingMethod(ClientNamenodeProtocolProtos.java)</span><br><span class="line">	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:<span class="number">616</span>)</span><br><span class="line">	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:<span class="number">969</span>)</span><br><span class="line">	at org.apache.hadoop.ipc.Server$Handler$<span class="number">1</span>.run(Server.java:<span class="number">2049</span>)</span><br><span class="line">	at org.apache.hadoop.ipc.Server$Handler$<span class="number">1</span>.run(Server.java:<span class="number">2045</span>)</span><br><span class="line">	at java.security.AccessController.doPrivileged(Native Method)</span><br><span class="line">	at javax.security.auth.Subject.doAs(Subject.java:<span class="number">422</span>)</span><br><span class="line">	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:<span class="number">1657</span>)</span><br><span class="line">	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:<span class="number">2043</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h3><ul>
+<li><p>首先运行项目，发现权限问题报错以后，在IDEA上选择 Run -&gt; Edit Configurations </p>
+<img src="/2020/02/12/java%E8%BF%9E%E6%8E%A5hadoop%E6%93%8D%E4%BD%9CHDFS%E6%A1%88%E4%BE%8B%E6%98%BE%E7%A4%BA%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/1.png" class="">
+</li>
+<li><p>在VM option选项中填写以下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-DHADOOP_USER_NAME=虚拟机上创建的用户名</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>这样重新运行测试就可以通过了！</p>
+</li>
+</ul>
+
+			
+		
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">proxy</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">hadoop - HDFS</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -213,17 +240,104 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://sunrise365.github.io/2020/02/12/java%E8%BF%9E%E6%8E%A5hadoop%E6%93%8D%E4%BD%9CHDFS%E6%A1%88%E4%BE%8B%E6%98%BE%E7%A4%BA%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2020/02/11/%C2%96SCP%E5%AE%89%E5%85%A8%E6%8B%B7%E8%B4%9D%E5%8F%8Arsync%E8%BF%9C%E7%A8%8B%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">SCP安全拷贝的三种方式以及rsync远程同步工具</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -246,9 +360,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
