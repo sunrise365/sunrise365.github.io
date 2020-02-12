@@ -16,7 +16,7 @@
 <meta property="og:description" content="问题概述在进行Hadoop的学习过程中，在虚拟机上搭建了集群服务，使用IDEA工具编写java连接hadoop集群并操作HDFS。但是在写测试代码运行以后出现的权限问题的错误">
 <meta property="og:image" content="http://sunrise365.github.io/2020/02/12/java%E8%BF%9E%E6%8E%A5hadoop%E6%93%8D%E4%BD%9CHDFS%E6%A1%88%E4%BE%8B%E6%98%BE%E7%A4%BA%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/1.png">
 <meta property="article:published_time" content="2020-02-12T08:31:59.000Z">
-<meta property="article:modified_time" content="2020-02-12T08:49:30.021Z">
+<meta property="article:modified_time" content="2020-02-12T10:19:03.201Z">
 <meta property="article:author" content="Fyq">
 <meta property="article:tag" content="hadoop - HDFS">
 <meta name="twitter:card" content="summary">
@@ -197,7 +197,7 @@
 
 <h3 id="报错信息（部分）"><a href="#报错信息（部分）" class="headerlink" title="报错信息（部分）"></a>报错信息（部分）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.security.AccessControlException: Permission denied: user=fyq, access=WRITE, inode=<span class="string">"/user/atguigu/input2"</span>:atguigu:supergroup:drwxr-xr-x</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.check(FSPermissionChecker.java:<span class="number">319</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.check(FSPermissionChecker.java:<span class="number">292</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:<span class="number">213</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSPermissionChecker.checkPermission(FSPermissionChecker.java:<span class="number">190</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:<span class="number">1720</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkPermission(FSDirectory.java:<span class="number">1704</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSDirectory.checkAncestorAccess(FSDirectory.java:<span class="number">1687</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSDirMkdirOp.mkdirs(FSDirMkdirOp.java:<span class="number">71</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.FSNamesystem.mkdirs(FSNamesystem.java:<span class="number">3894</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.server.namenode.NameNodeRpcServer.mkdirs(NameNodeRpcServer.java:<span class="number">983</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.protocolPB.ClientNamenodeProtocolServerSideTranslatorPB.mkdirs(ClientNamenodeProtocolServerSideTranslatorPB.java:<span class="number">622</span>)</span><br><span class="line">	at org.apache.hadoop.hdfs.protocol.proto.ClientNamenodeProtocolProtos$ClientNamenodeProtocol$<span class="number">2</span>.callBlockingMethod(ClientNamenodeProtocolProtos.java)</span><br><span class="line">	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:<span class="number">616</span>)</span><br><span class="line">	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:<span class="number">969</span>)</span><br><span class="line">	at org.apache.hadoop.ipc.Server$Handler$<span class="number">1</span>.run(Server.java:<span class="number">2049</span>)</span><br><span class="line">	at org.apache.hadoop.ipc.Server$Handler$<span class="number">1</span>.run(Server.java:<span class="number">2045</span>)</span><br><span class="line">	at java.security.AccessController.doPrivileged(Native Method)</span><br><span class="line">	at javax.security.auth.Subject.doAs(Subject.java:<span class="number">422</span>)</span><br><span class="line">	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:<span class="number">1657</span>)</span><br><span class="line">	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:<span class="number">2043</span>)</span><br></pre></td></tr></table></figure>
 
-<h3 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h3><ul>
+<h3 id="解决办法1："><a href="#解决办法1：" class="headerlink" title="解决办法1："></a>解决办法1：</h3><ul>
 <li><p>首先运行项目，发现权限问题报错以后，在IDEA上选择 Run -&gt; Edit Configurations </p>
 <img src="/2020/02/12/java%E8%BF%9E%E6%8E%A5hadoop%E6%93%8D%E4%BD%9CHDFS%E6%A1%88%E4%BE%8B%E6%98%BE%E7%A4%BA%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/1.png" class="">
 </li>
@@ -209,6 +209,13 @@
 <li><p>这样重新运行测试就可以通过了！</p>
 </li>
 </ul>
+<h3 id="解决办法2："><a href="#解决办法2：" class="headerlink" title="解决办法2："></a>解决办法2：</h3><ul>
+<li>使用FileSystem.get的三个参数的方法（URI  uri，Configuration conf，String user）</li>
+<li>URI : 填写的是虚拟机中hadoop-2.7.2/etc/hadoop/core-site.xml中配置的值</li>
+<li>String user ：虚拟机的普通用户</li>
+</ul>
+<h4 id="代码-推荐-："><a href="#代码-推荐-：" class="headerlink" title="代码(推荐)："></a>代码(推荐)：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">package com.atguigu.hdfs;</span><br><span class="line">import org.apache.hadoop.conf.Configuration;</span><br><span class="line">import org.apache.hadoop.fs.FileSystem;</span><br><span class="line">import org.apache.hadoop.fs.Path;</span><br><span class="line">import org.apache.http.annotation.ThreadSafe;</span><br><span class="line">import org.junit.Test;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.net.URI;</span><br><span class="line">import java.net.URISyntaxException;</span><br><span class="line">public class HdfsClient &#123;</span><br><span class="line">    &#x2F;&#x2F; 测试连接HDFS （创建一个目录）</span><br><span class="line">    @Test</span><br><span class="line">    public void TestMkdir() throws IOException, URISyntaxException, InterruptedException &#123;</span><br><span class="line">        Configuration conf &#x3D; new Configuration();</span><br><span class="line">        FileSystem fs &#x3D; FileSystem.get(new URI(&quot;hdfs:&#x2F;&#x2F;hadoop102:9000&quot;),conf,&quot;atguigu&quot;);</span><br><span class="line">        fs.mkdirs(new Path(&quot;&#x2F;user&#x2F;atguigu&#x2F;input3&quot;));</span><br><span class="line">        fs.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
 			
 		
@@ -430,19 +437,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">hadoop - HDFS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SCP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
               </li>
             
             <div class="clearfix"></div>
