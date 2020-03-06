@@ -6,16 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sunrise365.github.io">
-  <title>相册 | fyq</title>
+  <title>MapReduce以及shuffle的工作流程 | fyq</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="相册">
-<meta property="og:url" content="http://sunrise365.github.io/photography/index.html">
+  <meta name="description" content="本文主要比较详细的讲解了mapTask，reducetask以及shuffle的工作流程以及工作机制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MapReduce以及shuffle的工作流程">
+<meta property="og:url" content="http://sunrise365.github.io/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/index.html">
 <meta property="og:site_name" content="fyq">
-<meta property="article:published_time" content="2020-01-24T07:07:10.000Z">
-<meta property="article:modified_time" content="2020-01-24T07:08:03.503Z">
+<meta property="og:description" content="本文主要比较详细的讲解了mapTask，reducetask以及shuffle的工作流程以及工作机制">
+<meta property="og:image" content="http://sunrise365.github.io/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/1.png">
+<meta property="og:image" content="http://sunrise365.github.io/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/2.png">
+<meta property="og:image" content="http://sunrise365.github.io/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/3.png">
+<meta property="article:published_time" content="2020-03-06T03:38:58.000Z">
+<meta property="article:modified_time" content="2020-03-06T15:29:55.509Z">
 <meta property="article:author" content="Fyq">
+<meta property="article:tag" content="MapReduce">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://sunrise365.github.io/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/1.png">
   
     <link rel="alternative" href="/atom.xml" title="fyq" type="application/atom+xml">
   
@@ -161,20 +168,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="page-" class="article article-type-page " itemscope itemprop="blogPost">
+            <article id="post-MapReduce以及shuffle的工作流程" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      相册
+      MapReduce以及shuffle的工作流程
     </h1>
   
 
         
-        <a href="/photography/index.html" class="archive-article-date">
-  	<time datetime="2020-01-24T07:07:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-01-24</time>
+        <a href="/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/" class="archive-article-date">
+  	<time datetime="2020-03-06T03:38:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-06</time>
 </a>
         
       </header>
@@ -183,14 +190,96 @@
 		
 
 			
-				
+				<p>本文主要比较详细的讲解了mapTask，reducetask以及shuffle的工作流程以及工作机制</p>
+<a id="more"></a>
+
+<h2 id="1、MapTask工作机制"><a href="#1、MapTask工作机制" class="headerlink" title="1、MapTask工作机制"></a>1、MapTask工作机制</h2><img src="/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/1.png" class>
+
+<p><code>提交阶段</code></p>
+<ol>
+<li>首先准备待处理的文本 </li>
+<li>在提交之前会先获得待处理的数据信息，然后根据参数的配置，形成一个任务分配的规划</li>
+<li>在提交信息的时候会判断运行环境是本地还是yarn，如果是yarn的环境会把切片信息，配置文件信息以及当前的MapReduce的jar包提交上去</li>
+<li>当提交完成以后，yarn会有一个MrApplicationMaster专门接受请求信息，根据切片计算出需要开启多少个MapTask任务进程</li>
+</ol>
+<p><code>Read阶段</code></p>
+<ol start="5">
+<li>通过inputFormat读取数据，在读取数据的时候会创建RecorderReader对象（默认使用的是TextInputFormat，使用的是lineRecorderReader按行读取，将当前行的偏移量作为key，整行的数据作为value进行封装）对key和value进行封装，封装完了以后传递给Map方法</li>
+</ol>
+<p><code>Map阶段</code><br>6. 此时map（K,V）就会进行业务逻辑运算</p>
+<p><code>Collect阶段</code><br>7. 当map方法处理完了以后通过context.write写给了环形缓冲区。环形缓冲区属于内存，默认空间为100M，环形缓冲区分成两部分，一部分是存储元数据信息，另一部分存储的是map传递过来的实际数据（元数据中保存着实际数据的索引，分区信息，key起始位置，value的起始位置等），当在环形缓冲区中存储的数据达到80%的时候开始反向写，此时一遍向硬盘中刷写数据，一遍接受map传递过来的数据信息<br>8. 如果有需要可以对数据进行分区排序，在溢出过程及合并的过程中，都要调用Partitioner进行分区和针对key进行区内排序</p>
+<p><code>溢写阶段</code><br>9. 在环形缓冲区达到80%以后溢写到磁盘文件，溢写到磁盘上的文件应该已经分好区并且已经是在区内排好序的。溢写可以多次，所以在溢写完成以后会按照分区做一个Merge的归并排序</p>
+<p><code>Combin阶段</code><br>10. 这个虽然叫combine阶段，但是和前面的combine不同，这个是将多次溢写产生的多个溢写文件进行归并排序。即将多个溢写文件合并成一个文件并且做好排序</p>
+<ul>
+<li>Map阶段：该节点主要是将解析出的key/value交给用户编写map()函数处理，并产生一系列新的key/value</li>
+<li>Collect收集阶段：在用户编写map()函数中，当数据处理完成后，一般会调用OutputCollector.collect()输出结果。在该函数内部，它会将生成的key/value分区（调用Partitioner），并写入一个环形内存缓冲区中</li>
+<li>Spill阶段：即“溢写”，当环形缓冲区满后，MapReduce会将数据写到本地磁盘上，生成一个临时文件。需要注意的是，将数据写入本地磁盘之前，先要对数据进行一次本地排序，并在必要时对数据进行合并、压缩等操作<ul>
+<li>溢写阶段详情：<ul>
+<li>步骤1：利用快速排序算法对缓存区内的数据进行排序，排序方式是，先按照分区编号Partition进行排序，然后按照key进行排序。这样，经过排序后，数据以分区为单位聚集在一起，且同一分区内所有数据按照key有序</li>
+<li>步骤2：按照分区编号由小到大依次将每个分区中的数据写入任务工作目录下的临时文件output/spillN.out（N表示当前溢写次数）中。如果用户设置了Combiner，则写入文件之前，对每个分区中的数据进行一次聚集操作</li>
+<li>步骤3：将分区数据的元信息写到内存索引数据结构SpillRecord中，其中每个分区的元信息包括在临时文件中的偏移量、压缩前数据大小和压缩后数据大小。如果当前内存索引大小超过1MB，则将内存索引写到文件output/spillN.out.index中</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Combine阶段：当所有数据处理完成后，MapTask对所有临时文件进行一次合并，以确保最终只会生成一个数据文件</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当所有数据处理完后，MapTask会将所有临时文件合并成一个大文件，并保存到文件output/file.out中，同时生成相应的索引文件output/file.out.index。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在进行文件合并过程中，MapTask以分区为单位进行合并。对于某个分区，它将采用多轮递归合并的方式。每轮合并io.sort.factor（默认10）个文件，并将产生的文件重新加入待合并列表中，对文件排序后，重复以上过程，直到最终得到一个大文件。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;让每个MapTask最终只生成一个数据文件，可避免同时打开大量文件和同时读取大量小文件产生的随机读取带来的开销</p>
+<h2 id="2、ReduceTask工作机制"><a href="#2、ReduceTask工作机制" class="headerlink" title="2、ReduceTask工作机制"></a>2、ReduceTask工作机制</h2><img src="/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/2.png" class>
+
+<ol start="11">
+<li>mapTask进行Merge归并排序以后输出数据放在磁盘上，输出数据的位置在tmp/hadoop-Administrator/mapred/local/localRunner/Administrator下</li>
+<li>reduce会根据当前分区的个数来决定开启多少个ReduceTask进程</li>
+</ol>
+<p><code>Copy阶段</code><br>13. ReduceTask根据自己的分区号主动的将mapTask的内容拷贝到reduce中。同样在拷贝的时候也是拷贝到内存中，如果内存不够的话会溢写到磁盘上</p>
+<p><code>Sort、Merge阶段</code><br>14. ReduceTask会将这些文件再进行合并（归并排序），在合并的时候已经排好序了</p>
+<p><code>Reduce阶段</code><br>15. 使用reduce的方法读取数据（相同的key执行一次）</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果默认比较规则方法不满足需求，可以自定义分组（继承GroupingComparator类），在reduce方法之前进行，这样reduce方法在读取数据的时候可以一次读取自定义分组的一组数据。当reduceTask方法完成以后，默认使用TextOutPutFormat方法向磁盘上刷写文件。</p>
+<h2 id="3、-shuffle机制"><a href="#3、-shuffle机制" class="headerlink" title="3、 shuffle机制"></a>3、 shuffle机制</h2><p>Map方法之后，reduce方法之前的数据处理过程称之为shuffle</p>
+<img src="/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/3.png" class>
+
+<p>环形缓冲区需要设计成两部分，一部分是元数据，另外一部分是存储实际的值，这样做的好处：如果在这个时候做分区或者排序的时候，就只需要对元数据做就可以了，而不需要对数据存储数据做改动</p>
+<ol>
+<li>map方法在处理完数据以后传递给环形缓冲区，环形缓冲区属于内存，默认空间为100M，环形缓冲区分成两部分，一部分是存储元数据信息，另一部分存储的是map传递过来的实际数据（元数据中保存着实际数据的索引，分区信息，key起始位置，value的起始位置等）</li>
+<li>当在环形缓冲区中存储的数据达到80%的时候开始向磁盘开始溢写，在保存到磁盘上之前会根据自己的设定将环形缓冲区中的内容进行分区，并且对分区的内容做排序，然后溢写到磁盘上</li>
+<li>在溢写的时候可以做合并（例如出现3次&lt;a,1&gt;，合并会变成&lt;a,3&gt;），combiner是可选流程，且并不属于reduce的范围之内，其实是独立于MapReduce的。</li>
+<li>在向磁盘上溢写的过程中可能会出现多次溢写，过程类似，所以会生成多个溢写文件，在溢写文件中存储溢写索引（split.index），以及溢写溢写的存储文件。会在reduce处理之前将溢写文件进行归并</li>
+<li>在进行分区归并以后也可以再进行一次combiner（例如分区hexo1出现了&lt;a,3&gt;,分区2出现了&lt;a,5&gt;，在合并以后会变成&lt;a,8&gt;，在进行合并以后可以减轻reduce的工作量），然后溢写到磁盘上</li>
+<li>在map阶段结束以后就会进入reduce阶段，ReduceTask根据自己的分区号主动的将mapTask的内容拷贝到内存缓冲中，在内存满了以后就会溢写到磁盘，并对每个map来的数据进行归并排序，在按照相同的key进行分组（继承<code>WritableComparator</code>重写compara方法指定分组规则）</li>
+<li>在分组以后，根据不同的分组将数据传递给reduce</li>
+</ol>
+
 			
 		
     </div>
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">MapReduce</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/大数据//" class="article-tag-list-link color4">大数据</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
 
@@ -240,7 +329,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://sunrise365.github.io/photography/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://sunrise365.github.io/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -252,6 +341,16 @@
 </article>
 
   
+<nav id="article-nav">
+  
+  
+    <a href="/2020/02/27/%C2%96sudo%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E6%97%B6%E6%8F%90%E7%A4%BA%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%A5%E5%91%BD%E4%BB%A4/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">sudo执行命令时提示找不到该命令</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -302,7 +401,7 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

@@ -229,12 +229,12 @@
 </ul>
 <h2 id="原理详解："><a href="#原理详解：" class="headerlink" title="原理详解："></a>原理详解：</h2><p>在一般情况下，Linux安装完程序如果需要配置环境变量的时候，最好（也是官方推荐的）在<B>/etc/profile.d</B>的文件夹下新建一个<B>.sh</B>的文件里面配置环境变量。而不是直接在<B>/etc/profile</B>里面直接配置</p>
 <p>这是因为profile会先找<B>/etc/profile.d</B>文件夹下的<B>.sh</B>文件，读取里面的配置信息：profile源码如下：</p>
-<img src="/2020/02/27/%C2%96sudo%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E6%97%B6%E6%8F%90%E7%A4%BA%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%A5%E5%91%BD%E4%BB%A4/1.png" class="">
+<img src="/2020/02/27/%C2%96sudo%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E6%97%B6%E6%8F%90%E7%A4%BA%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%A5%E5%91%BD%E4%BB%A4/1.png" class>
 
 <p>但是如果在<B>/etc/profile.d</B>的文件夹下配置的文件不带<B>.sh</B>结尾的话，使用<B>java -version</B>的命令也是可以输出信息的，但是如果使用 <B>ssh hadoop102 ‘java -version’</B>的时候就会显示<B>command not found</B>，这是因为使用<B>ssh</B>访问的时候是以<B>nologin</B>的形式访问的，这个是不会加载<B>/etc/profile</B>文件的。他会加载<B>/etc/bashrc</B>这个文件。</p>
 <p>那么为什么配置在文件夹下的.sh文件就会被加载呢？通过<B>cat /etc/bashrc</B>可以看到这个文件里面配置了会扫描<B>/etc/profile.d/*.sh</B>，也就是说会读取<B>/etc/profile.d</B>下的.sh文件里面的配置。</p>
 <p><B>/etc/bashrc</B>源码如下：</p>
-<img src="/2020/02/27/%C2%96sudo%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E6%97%B6%E6%8F%90%E7%A4%BA%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%A5%E5%91%BD%E4%BB%A4/2.png" class="">
+<img src="/2020/02/27/%C2%96sudo%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E6%97%B6%E6%8F%90%E7%A4%BA%E6%89%BE%E4%B8%8D%E5%88%B0%E8%AF%A5%E5%91%BD%E4%BB%A4/2.png" class>
 
 
 
@@ -330,6 +330,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2020/03/06/MapReduce%E4%BB%A5%E5%8F%8Ashuffle%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          MapReduce以及shuffle的工作流程
+        
+      </div>
+    </a>
   
   
     <a href="/2020/02/22/jdk%E7%89%88%E6%9C%AC%E4%B8%8D%E5%90%8C%E5%AF%BC%E8%87%B4%E7%BC%96%E8%AF%91%E7%94%9F%E6%88%90%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%8D%E5%8F%AF%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
@@ -459,7 +468,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">hadoop - HDFS</a>
+                <a href="javascript:void(0)" class="js-tag color5">MapReduce</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -471,11 +480,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
+                <a href="javascript:void(0)" class="js-tag color4">hadoop - HDFS</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
               </li>
              
               <li class="article-tag-list-item">

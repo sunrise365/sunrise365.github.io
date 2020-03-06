@@ -198,19 +198,19 @@
 <li>虚拟机的ip地址是：192.168.3.168</li>
 <li>虚拟机采用的centos8，网络为桥接模式</li>
 </ul>
-<h4 id="1-在Windows上的hosts中配置虚拟机的ip地址-与域名的对应关系"><a href="#1-在Windows上的hosts中配置虚拟机的ip地址-与域名的对应关系" class="headerlink" title="1. 在Windows上的hosts中配置虚拟机的ip地址 与域名的对应关系"></a>1. 在Windows上的hosts中配置虚拟机的ip地址 与域名的对应关系</h4><img src="/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/1.png" class="">
+<h4 id="1-在Windows上的hosts中配置虚拟机的ip地址-与域名的对应关系"><a href="#1-在Windows上的hosts中配置虚拟机的ip地址-与域名的对应关系" class="headerlink" title="1. 在Windows上的hosts中配置虚拟机的ip地址 与域名的对应关系"></a>1. 在Windows上的hosts中配置虚拟机的ip地址 与域名的对应关系</h4><img src="/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/1.png" class>
 
 <ol>
 <li>这一步可以直接在host的文件中修改，也可以使用辅助工具SwitchHosts，效果是一样的</li>
 <li>host中填写的地址是虚拟机中Linux的ip地址，这样才能根据地址请求找到虚拟机</li>
 </ol>
-<h4 id="2-在虚拟机中的-etc-hosts-文件中也配置主机的ip-以及与域名的对应关系"><a href="#2-在虚拟机中的-etc-hosts-文件中也配置主机的ip-以及与域名的对应关系" class="headerlink" title="2. 在虚拟机中的 /etc/hosts 文件中也配置主机的ip 以及与域名的对应关系"></a>2. 在虚拟机中的 /etc/hosts 文件中也配置主机的ip 以及与域名的对应关系</h4><img src="/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/2.png" class="">
+<h4 id="2-在虚拟机中的-etc-hosts-文件中也配置主机的ip-以及与域名的对应关系"><a href="#2-在虚拟机中的-etc-hosts-文件中也配置主机的ip-以及与域名的对应关系" class="headerlink" title="2. 在虚拟机中的 /etc/hosts 文件中也配置主机的ip 以及与域名的对应关系"></a>2. 在虚拟机中的 /etc/hosts 文件中也配置主机的ip 以及与域名的对应关系</h4><img src="/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/2.png" class>
 
 <p>这一步非常关键，以为我查阅了很多资料是没有配置这一步的，但是我在做的时候，没有配置虚拟机与主机的对应关系而访问不到！如果你也是可以试试在虚拟机上的host文件中加上主机的ip地址</p>
 <h4 id="3-在nginx-config中添加的配置，地址就在你安装nginx文件的conf文件夹中"><a href="#3-在nginx-config中添加的配置，地址就在你安装nginx文件的conf文件夹中" class="headerlink" title="3. 在nginx.config中添加的配置，地址就在你安装nginx文件的conf文件夹中"></a>3. 在nginx.config中添加的配置，地址就在你安装nginx文件的conf文件夹中</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       <span class="number">80</span>;</span><br><span class="line">        server_name  manage.leyou.com;</span><br><span class="line"></span><br><span class="line">        proxy_set_header X-Forwarded-Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-Server $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">			proxy_pass http:<span class="comment">//192.168.3.217:9001;</span></span><br><span class="line">			proxy_connect_timeout <span class="number">600</span>;</span><br><span class="line">			proxy_read_timeout <span class="number">600</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	server &#123;</span><br><span class="line">        listen       <span class="number">80</span>;</span><br><span class="line">        server_name  api.leyou.com;</span><br><span class="line"></span><br><span class="line">        proxy_set_header X-Forwarded-Host $host;</span><br><span class="line">        proxy_set_header X-Forwarded-Server $host;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">			proxy_pass http:<span class="comment">//192.168.3.217:10010;</span></span><br><span class="line">			proxy_connect_timeout <span class="number">600</span>;</span><br><span class="line">			proxy_read_timeout <span class="number">600</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p>​    这里需要修改proxy_pass http，将后面的IP地址以及端口号修改为自己主机的IP地址以及项目启动的端口号即可。</p>
-<h4 id="4-前端的端口号以及ip-：-如果是虚拟机要配置成0-0-0-0，这样才能被别的ip访问，如果是localhost或者127-0-0-1的话是只能通过本机访问的"><a href="#4-前端的端口号以及ip-：-如果是虚拟机要配置成0-0-0-0，这样才能被别的ip访问，如果是localhost或者127-0-0-1的话是只能通过本机访问的" class="headerlink" title="4. 前端的端口号以及ip ： 如果是虚拟机要配置成0.0.0.0，这样才能被别的ip访问，如果是localhost或者127.0.0.1的话是只能通过本机访问的"></a>4. 前端的端口号以及ip ： 如果是虚拟机要配置成0.0.0.0，这样才能被别的ip访问，如果是localhost或者127.0.0.1的话是只能通过本机访问的</h4><img src="/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/4.png" class="">
+<h4 id="4-前端的端口号以及ip-：-如果是虚拟机要配置成0-0-0-0，这样才能被别的ip访问，如果是localhost或者127-0-0-1的话是只能通过本机访问的"><a href="#4-前端的端口号以及ip-：-如果是虚拟机要配置成0-0-0-0，这样才能被别的ip访问，如果是localhost或者127-0-0-1的话是只能通过本机访问的" class="headerlink" title="4. 前端的端口号以及ip ： 如果是虚拟机要配置成0.0.0.0，这样才能被别的ip访问，如果是localhost或者127.0.0.1的话是只能通过本机访问的"></a>4. 前端的端口号以及ip ： 如果是虚拟机要配置成0.0.0.0，这样才能被别的ip访问，如果是localhost或者127.0.0.1的话是只能通过本机访问的</h4><img src="/2020/01/25/linux%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85nginx%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE/4.png" class>
 
 <h4 id="5-记得关闭Windows和Linux的防火墙！"><a href="#5-记得关闭Windows和Linux的防火墙！" class="headerlink" title="5. 记得关闭Windows和Linux的防火墙！"></a>5. 记得关闭Windows和Linux的防火墙！</h4>
 			
@@ -437,7 +437,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">hadoop - HDFS</a>
+                <a href="javascript:void(0)" class="js-tag color5">MapReduce</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -449,11 +449,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
+                <a href="javascript:void(0)" class="js-tag color4">hadoop - HDFS</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
               </li>
              
               <li class="article-tag-list-item">
